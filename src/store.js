@@ -1,15 +1,15 @@
 import { createStore, combineReducers} from "redux";
+import { STORING_ARTICLES } from "./types"
 
 const defaultState = {
-  tip: "tap"
+  articles: []
 }
 
 function rootReducer(state = defaultState, action){
   console.log("rootReducer", state, action)
   switch(action.type){
-    case "STORING_ARTICLES":
+    case STORING_ARTICLES:
       return {...state, articles: action.payload};
-      // "hello" is now the state——whatever the reducer returns is state
       //
     default:
       return {hat:"hit"};

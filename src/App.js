@@ -1,7 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import './App.css';
 import ReaderFrontPage from "./Containers/ReaderFrontPage";
+import LoginPage from "./Containers/LoginPage"
 import { connect } from "react-redux";
+import { STORING_ARTICLES } from "./types"
+import { Switch, Route } from 'react-router-dom';
 
 const apiUrl = "http://localhost:3001/api/v1/articles"
 
@@ -13,19 +16,25 @@ class App extends Component {
       .then(parsed => this.props.storeArticles(parsed))
       //use props to dispatch an action to store the parsed articles
   }
-
+  //check Redux docs on React-Router if there are problems later
+  // admin link deliberately!! not provided to reader
+  // but we'll provide something on reader front page if
+  // the user is already logged in 
   render() {
     return (
-      <div className="App">
-        <ReaderFrontPage />
-      </div>
+      <Fragment>
+        <Switch>
+          <Route path="/admin" component={() =><LoginPage />} />
+          <Route path="/" component={() =><ReaderFrontPage />} />
+        </Switch>
+      </Fragment>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {storeArticles: (articles) => {
-    dispatch({type: "STORING_ARTICLES", payload: articles})
+    dispatch({type: STORING_ARTICLES, payload: articles})
   }}
   // this key value pair storeArticles: fn() handles putting fetched articles
   // into the store
