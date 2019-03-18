@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import './App.css';
 import ReaderFrontPage from "./Containers/ReaderFrontPage";
 import LoginPage from "./Containers/LoginPage"
+import NoMatch from "./Components/NoMatch"
 import { connect } from "react-redux";
 import { STORING_ARTICLES } from "./types"
 import { Switch, Route } from 'react-router-dom';
@@ -19,13 +20,14 @@ class App extends Component {
   //check Redux docs on React-Router if there are problems later
   // admin link deliberately!! not provided to reader
   // but we'll provide something on reader front page if
-  // the user is already logged in 
+  // the user is already logged in
   render() {
     return (
       <Fragment>
         <Switch>
-          <Route path="/admin" component={() =><LoginPage />} />
-          <Route path="/" component={() =><ReaderFrontPage />} />
+          <Route path="/admin" component={LoginPage} />
+          <Route path="/" exact component={ReaderFrontPage} />
+          <Route component={NoMatch} />
         </Switch>
       </Fragment>
     );
