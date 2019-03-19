@@ -1,8 +1,11 @@
 import { createStore, combineReducers} from "redux";
-import { STORING_ARTICLES } from "./types"
+import { STORING_ARTICLES, LOGGING_EMAIL, LOGGING_PASSWORD } from "./types"
+
 
 const defaultState = {
-  articles: []
+  articles: [],
+  email: "",
+  password: ""
 }
 
 function rootReducer(state = defaultState, action){
@@ -11,6 +14,10 @@ function rootReducer(state = defaultState, action){
     case STORING_ARTICLES:
       return {...state, articles: action.payload};
       //
+    case LOGGING_EMAIL:
+      return {...state, email: action.payload};
+    case LOGGING_PASSWORD:
+      return {...state, password: action.payload};
     default:
       return {hat:"hit"};
   }

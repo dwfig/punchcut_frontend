@@ -3,6 +3,7 @@ import React from "react";
 
 
 const ArticlePreview = (props) => {
+  console.log(props.props)
   let byLine = props.props.users.filter(user=> user.role === "writer")[0].name
   // byline is the associated user whose roll was writer
   // TODO: account for multiple writers ("Fred" "Fred and George" "Fred, George, and Ron")
