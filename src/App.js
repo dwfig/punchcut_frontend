@@ -5,6 +5,7 @@ import LoginPage from "./Containers/LoginPage"
 import NoMatch from "./Components/NoMatch"
 import RedirectPage from "./Containers/RedirectPage"
 import WriterFrontPage from "./Containers/WriterFrontPage"
+import EditPage from "./Containers/EditPage"
 import { connect } from "react-redux";
 import { STORING_ARTICLES } from "./types"
 import { Switch, Route, withRouter } from 'react-router-dom';
@@ -31,8 +32,9 @@ class App extends Component {
         <Switch>
           <Route exact path="/admin" component={LoginPage} />
           <Route exact path="/" component={ReaderFrontPage} />
-          <Route path="/user" component={WriterFrontPage} />
-          <Route path="/redirect" component={RedirectPage} />
+          <Route exact path="/user" component={WriterFrontPage} />
+          <Route exact path="/redirect" component={RedirectPage} />
+          <Route exact path="/edit/:articleId" component={EditPage} name="edit" />
           <Route component={NoMatch} />
         </Switch>
     );

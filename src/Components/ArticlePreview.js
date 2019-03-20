@@ -1,7 +1,5 @@
 import React from "react";
 
-
-
 const ArticlePreview = (props) => {
   console.log(props.props)
   let byLine = props.props.users.filter(user=> user.role === "writer")[0].name

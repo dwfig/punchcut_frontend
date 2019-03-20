@@ -1,10 +1,24 @@
 import React from 'react';
-import { NavLink } from 'react-router';
+import { NavLink } from 'react-router-dom';
+import { connect } from "react-redux";
+import { EDITING_ARTICLE } from "../types";
 
 const WriterArticlePreview = (props) => {
   return(
-    <div>{props.article.headline}</div>
+    <NavLink to={`edit/${props.article.id}`}>
+      <div onClick={() => props.editArticle(props.article)}>
+        {props.article.headline}
+      </div>
+    </ NavLink>
   )
 }
 
-export default WriterArticlePreview
+const mapDispatchToProps = (dispatch) => {
+  console.log("dispatch", dispatch)
+  return {editArticle: (article) => {
+    console.log("article", article)
+    dispatch({type: EDITING_ARTICLE, payload: article})
+  }}
+}
+
+export default connect(null, mapDispatchToProps)(WriterArticlePreview)

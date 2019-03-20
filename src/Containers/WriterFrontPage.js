@@ -12,10 +12,6 @@ import WriterArticlePreview from "../Components/WriterArticlePreview"
 // (they should be the same page, that's work today)
 
 class WriterFrontPage extends React.Component {
-  constructor(props) {
-    super(props);
-    console.log('WriterFrontPage', this.props);
-  }
 
   getWritersArticles(){
     let articleUsers = this.props.articles.map((article)=>{return article.users})
@@ -37,7 +33,6 @@ class WriterFrontPage extends React.Component {
 
   generateWriterArticlePreviews(){
     let writersArticles = this.getWritersArticles()
-    console.log(writersArticles)
     return writersArticles.map((article, index)=>{
       return(
         <WriterArticlePreview key={index} article={article}/>

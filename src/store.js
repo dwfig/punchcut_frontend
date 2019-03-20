@@ -1,16 +1,16 @@
 import { createStore } from "redux";
-import { STORING_ARTICLES, LOGGING_EMAIL, LOGGING_PASSWORD, SETTING_USER } from "./types"
+import { STORING_ARTICLES, LOGGING_EMAIL, LOGGING_PASSWORD, SETTING_USER, EDITING_ARTICLE } from "./types"
 
 
 const defaultState = {
   articles: [],
   currUser: {},
+  currArticle: {},
   email: "",
   password: ""
 }
 
 function rootReducer(state = defaultState, action){
-  //console.log("rootReducer", state, action)
   switch(action.type){
     case STORING_ARTICLES:
       return {...state, articles: action.payload};
@@ -22,6 +22,9 @@ function rootReducer(state = defaultState, action){
     case SETTING_USER:
       // console.log('reducer set user', action.payload);
       return {...state, currUser: action.payload}
+    case EDITING_ARTICLE:
+      console.log("hit reducer", state, action)
+      return {...state, currArticle: action.payload}
     default:
       return {};
   }
