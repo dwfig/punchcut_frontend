@@ -14,9 +14,7 @@ const WriterArticlePreview = (props) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  console.log("dispatch", dispatch)
   return {editArticle: (article) => {
-    console.log("article", article)
     dispatch({type: EDITING_ARTICLE, payload: article})
   }}
 }
