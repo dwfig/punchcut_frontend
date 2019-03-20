@@ -1,14 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { LOGGING_EMAIL, LOGGING_PASSWORD } from "../types"
+import { LOGGING_EMAIL, LOGGING_PASSWORD, SETTING_USER } from "../types"
+import { Redirect } from "react-router";
 
 // form here somewhere
 const LoginPage = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    console.log(props.email, props.password)
-    console.log("handleSubmit")
     fetch("http://localhost:3001/api/v1/login", {
       method: "POST",
       headers: {
@@ -17,42 +16,53 @@ const LoginPage = (props) => {
       },
       body: JSON.stringify({
         email: props.email,
-        password: props.password})
+        password: props.password
+      })
     })
     .then(res => res.json())
     .then(response => {
       if (response.errors){
         alert(response.errors)
       } else {
-        console.log(props.history)
+        // props.history.push("/user")
+        props.setUser(response)
+        console.log(props, response)
+        props.logEmail("")
+        props.logPassword("")
       }})
-    //.then(console.log)
   }
 
+  // console.log(props.currUser)
   return(
-    <div>
-    <form>
+    props.currUser ? (
+      <Redirect to="/user"/>
+    ) : (
+   <div>
+    <form onSubmit={handleSubmit}>
       <label>email:
         <input type="text" name="email" onChange={e => props.logEmail(e.currentTarget.value)}/>
       </label>
       <label>password:
         <input type="password" name="password" onChange={e => props.logPassword(e.currentTarget.value)} />
       </label>
-      <input type="submit" value="login" onClick={handleSubmit}/>
+      <input type="submit" value="login"/>
     </form>
     </div>
-  )
+  ))
 }
 // adding redux here:
 
 const mapStateToProps = (state) => {
-  return {email: state.email, password: state.password}
+  // console.log("state:", state)
+  return {email: state.email, password: state.password, currUser: state.currUser}
 }
 
 const mapDispatchToProps = (dispatch) => {
+  console.log("dispatch:", dispatch)
   return {
     logPassword: (password) => {dispatch({type: LOGGING_PASSWORD, payload: password})},
-    logEmail: (email) => {dispatch({type: LOGGING_EMAIL, payload: email})}
+    logEmail: (email) => {dispatch({type: LOGGING_EMAIL, payload: email})},
+    setUser: (user) => {dispatch({type: SETTING_USER, payload: user})}
   }
 }
 

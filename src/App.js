@@ -3,13 +3,18 @@ import './App.css';
 import ReaderFrontPage from "./Containers/ReaderFrontPage";
 import LoginPage from "./Containers/LoginPage"
 import NoMatch from "./Components/NoMatch"
+import RedirectPage from "./Containers/RedirectPage"
+import WriterFrontPage from "./Containers/WriterFrontPage"
 import { connect } from "react-redux";
 import { STORING_ARTICLES } from "./types"
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 
 const apiUrl = "http://localhost:3001/api/v1/articles"
 
 class App extends Component {
+  constructor(props){
+    super(props)
+  }
 
   componentDidMount(){
     fetch(apiUrl)
@@ -21,15 +26,19 @@ class App extends Component {
   // admin link deliberately!! not provided to reader
   // but we'll provide something on reader front page if
   // the user is already logged in
+
+  // add a currUser in state/store, check against that here
+  // <Route path="/user" component={currUser ? WriterFrontPage : RedirectPage} />
   render() {
+    console.log('App', this.props)
     return (
-      <Fragment>
         <Switch>
-          <Route path="/admin" component={LoginPage} />
-          <Route path="/" exact component={ReaderFrontPage} />
+          <Route exact path="/admin" component={LoginPage} />
+          <Route exact path="/" component={ReaderFrontPage} />
+          <Route path="/user" component={WriterFrontPage} />
+          <Route path="/redirect" component={RedirectPage} />
           <Route component={NoMatch} />
         </Switch>
-      </Fragment>
     );
   }
 }
@@ -44,4 +53,4 @@ const mapDispatchToProps = (dispatch) => {
   // which makes use of it in the fetch
 }
 
-export default connect(null, mapDispatchToProps)(App);
+export default withRouter(connect(null, mapDispatchToProps)(App));
