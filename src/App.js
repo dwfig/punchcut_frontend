@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import './App.css';
 import ReaderFrontPage from "./Containers/ReaderFrontPage";
 import LoginPage from "./Containers/LoginPage"
@@ -12,9 +12,6 @@ import { Switch, Route, withRouter } from 'react-router-dom';
 const apiUrl = "http://localhost:3001/api/v1/articles"
 
 class App extends Component {
-  constructor(props){
-    super(props)
-  }
 
   componentDidMount(){
     fetch(apiUrl)
@@ -30,7 +27,6 @@ class App extends Component {
   // add a currUser in state/store, check against that here
   // <Route path="/user" component={currUser ? WriterFrontPage : RedirectPage} />
   render() {
-    console.log('App', this.props)
     return (
         <Switch>
           <Route exact path="/admin" component={LoginPage} />

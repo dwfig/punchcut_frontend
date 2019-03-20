@@ -1,4 +1,4 @@
-import { createStore, combineReducers} from "redux";
+import { createStore } from "redux";
 import { STORING_ARTICLES, LOGGING_EMAIL, LOGGING_PASSWORD, SETTING_USER } from "./types"
 
 
@@ -23,7 +23,7 @@ function rootReducer(state = defaultState, action){
       // console.log('reducer set user', action.payload);
       return {...state, currUser: action.payload}
     default:
-      return {hat:"hit"};
+      return {};
   }
 }
 

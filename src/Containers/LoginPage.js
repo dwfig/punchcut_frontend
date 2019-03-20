@@ -26,7 +26,6 @@ const LoginPage = (props) => {
       } else {
         // props.history.push("/user")
         props.setUser(response)
-        console.log(props, response)
         props.logEmail("")
         props.logPassword("")
       }})
@@ -58,7 +57,6 @@ const mapStateToProps = (state) => {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  console.log("dispatch:", dispatch)
   return {
     logPassword: (password) => {dispatch({type: LOGGING_PASSWORD, payload: password})},
     logEmail: (email) => {dispatch({type: LOGGING_EMAIL, payload: email})},
