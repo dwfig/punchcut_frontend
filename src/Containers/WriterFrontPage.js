@@ -41,9 +41,12 @@ class WriterFrontPage extends React.Component {
   }
 
   render() {
-    return(
-      this.props.currUser ? (this.generateWriterArticlePreviews()) : (<Redirect to="/redirect" />)
-    )
+    return(this.props.currUser ? (
+      <>
+      {this.generateWriterArticlePreviews()}
+      <input type="button" value="new article"/>
+      </>
+    ) : (<Redirect to="/redirect" />))
   }
 }
 
