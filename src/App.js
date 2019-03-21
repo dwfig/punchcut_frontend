@@ -19,6 +19,10 @@ class App extends Component {
       .then(res => res.json())
       .then(parsed => this.props.storeArticles(parsed))
       //use props to dispatch an action to store the parsed articles
+    const userId = localStorage.getItem("user_id")
+    if (userId){
+      
+    }
   }
   //check Redux docs on React-Router if there are problems later
   // admin link deliberately!! not provided to reader

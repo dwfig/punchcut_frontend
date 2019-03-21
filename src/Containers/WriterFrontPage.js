@@ -2,6 +2,8 @@ import React from "react";
 import { connect } from "react-redux";
 import { Redirect } from "react-router";
 import WriterArticlePreview from "../Components/WriterArticlePreview"
+import { EDITING_ARTICLE } from "../types";
+
 
 // TODO: this page should make its own fetch—the front page should fetch, this should fetch
 // instead of relying on a single prelim fetch and sorting that data (probably?)
@@ -12,6 +14,7 @@ import WriterArticlePreview from "../Components/WriterArticlePreview"
 // (they should be the same page, that's work today)
 
 const postUrl = "http://localhost:3001/api/v1/articles"
+const rolesUrl = "http://localhost:3001/api/v1/roles"
 
 class WriterFrontPage extends React.Component {
 
@@ -43,7 +46,10 @@ class WriterFrontPage extends React.Component {
   }
 
   handleNewArticle(){
+    //this should be refactored into several helper methods
+    // first fetch, second fetch, redirect
     //console.log("clicked")
+    let newArticle = {}
     fetch(postUrl, {
       method: "POST",
       headers: {
@@ -54,12 +60,36 @@ class WriterFrontPage extends React.Component {
         "text" : "",
         "headline" :"Untitled Article",
         "posted" : "false",
-        "user_id" : this.props.currUser.id,
+        // it's not clear to me how to handle boolean values
+        // between rails and js
+        // i think one approach is to make them strings
       })
     })
     .then(res => res.json())
-    .then(parsed=>console.log(parsed))
-    //this method should also redirect you to the new article
+    .then(parsed=> {
+      newArticle = parsed
+      //console.log(newArticleId)
+      return newArticle.id
+    })
+    .then(a => fetch(rolesUrl,{
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept" : "application/json"
+      },
+      body: JSON.stringify({
+        "user_id": this.props.currUser.id,
+        "article_id": newArticle.id,
+        "user_role" : "writer"
+      })
+    }))
+    .then(a => {
+      console.log(newArticle, this.props.currArticle)
+      this.props.editArticle(newArticle)
+      this.props.history.push(`/edit/${newArticle.id}`)
+    })
+    // this should set currArticle to this article
+
   }
 
   render() {
@@ -73,15 +103,13 @@ class WriterFrontPage extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-  return {currUser : state.currUser, articles: state.articles}
+  return {currUser : state.currUser, currArticle: state.currArticle, articles: state.articles}
 }
 
-export default connect(mapStateToProps)(WriterFrontPage)
+const mapDispatchToProps = (dispatch) => {
+  return {editArticle: (article) => {
+    dispatch({type: EDITING_ARTICLE, payload: article})
+  }}
+}
 
-
-
-  // props.currUser === undefined ?(
-  //   <h1> undefined user </h1>
-  // ):(
-  //   <div> Hello and congrats</div>
-  // )
+export default connect(mapStateToProps, mapDispatchToProps)(WriterFrontPage)

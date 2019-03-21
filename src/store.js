@@ -5,7 +5,8 @@ import { STORING_ARTICLES,
   SETTING_USER,
   EDITING_ARTICLE,
   EDITING_TEXT ,
-  EDITING_HEADLINE } from "./types"
+  EDITING_HEADLINE,
+  POSTING_ARTICLE} from "./types"
 
 
 const defaultState = {
@@ -26,7 +27,7 @@ function rootReducer(state = defaultState, action){
     case LOGGING_PASSWORD:
       return {...state, password: action.payload};
     case SETTING_USER:
-      // console.log('reducer set user', action.payload);
+      localStorage.setItem("user_id", action.payload.id)
       return {...state, currUser: action.payload}
     case EDITING_ARTICLE:
       return {...state, currArticle: action.payload}
@@ -34,6 +35,9 @@ function rootReducer(state = defaultState, action){
       return {...state, currArticle: {...state.currArticle, text: action.payload}}
     case EDITING_HEADLINE:
       return {...state, currArticle: {...state.currArticle, headline: action.payload}}
+    case POSTING_ARTICLE:
+      console.log(state.currArticle)
+      return {...state, currArticle: {...state.currArticle, posted: true}}
     default:
       return {};
   }

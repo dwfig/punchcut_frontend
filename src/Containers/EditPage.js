@@ -1,17 +1,17 @@
 import React from "react";
 import { Redirect } from "react-router";
+import { NavLink } from "react-router-dom";
 import { connect } from "react-redux";
-import { EDITING_TEXT, EDITING_HEADLINE } from "../types"
+import { EDITING_TEXT, EDITING_HEADLINE , POSTING_ARTICLE } from "../types"
 
-const saveArticleUrl = "http://localhost:3001/api/v1/articles"
+const saveArticleUrl = (id) => {return `http://localhost:3001/api/v1/articles/${id}`}
 
 const EditPage = (props) => {
-  console.log(props)
 
   const handleSave = () => {
-    console.log("clicked", props.currArticle)
-    fetch(saveArticleUrl, {
-      method: "PATCH",
+    console.log("clicked", props.currArticle.posted)
+    fetch(saveArticleUrl(props.currArticle.id), {
+      method: "PUT",
       headers: {
         "Content-Type": "application/json",
         "Accept" : "application/json"
@@ -20,9 +20,10 @@ const EditPage = (props) => {
         "text" : props.currArticle.text,
         "headline" : props.currArticle.headline,
         "posted" : props.currArticle.posted,
-        "user_id" : this.props.currUser.id,
       })
     })
+    .then(a => a.json())
+    .then(pars => console.log(pars))
   }
 
   return( props.currArticle ? (
@@ -38,8 +39,13 @@ const EditPage = (props) => {
           onChange={(event) => props.editText(event.target.value)} />
         <br />
         <div>Posted?</div>
-        <input type="checkbox" value={props.currArticle.posted}/>
+        <input
+          type="checkbox"
+          checked={props.currArticle.posted}
+          onChange={(event) => props.postArticle(props.currArticle.id)}/>
         <input type="button" value="save" onClick={()=>handleSave()}/>
+        <br/>
+        <NavLink to="/user">Back to My Articles</NavLink>
       </>
   ) : (<Redirect to="/user" />)
   )
@@ -49,7 +55,7 @@ const EditPage = (props) => {
 // <input type="button" value="post"/>
 
 const mapStateToProps = (state) => {
-  return {currArticle: state.currArticle}
+  return {currArticle: state.currArticle, currUser: state.currUser}
 }
 
 // onChange on the textareas
@@ -58,7 +64,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) =>{
   return {
     editText: (text) =>{dispatch({type: EDITING_TEXT, payload: text})},
-    editHeadline: (headline) => {dispatch({type: EDITING_HEADLINE, payload: headline})}
+    editHeadline: (headline) => {dispatch({type: EDITING_HEADLINE, payload: headline})},
+    postArticle: (articleId) => {dispatch({type: POSTING_ARTICLE, payload: articleId})}
   }
 }
 

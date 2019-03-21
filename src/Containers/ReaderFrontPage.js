@@ -9,7 +9,7 @@ const ReaderFrontPage = (props) =>{
     if(articles !== undefined){
       // this should be refactored include some kind of ternary/loading alert
       return props.articles.map((article) => {
-        // console.log(article.posted)
+        console.log(article)
         if (article.posted){
           return <ArticlePreview key={article.id} props={article}/>
         } else {
