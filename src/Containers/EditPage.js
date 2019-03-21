@@ -3,9 +3,28 @@ import { Redirect } from "react-router";
 import { connect } from "react-redux";
 import { EDITING_TEXT, EDITING_HEADLINE } from "../types"
 
+const saveArticleUrl = "http://localhost:3001/api/v1/articles"
 
 const EditPage = (props) => {
   console.log(props)
+
+  const handleSave = () => {
+    console.log("clicked", props.currArticle)
+    fetch(saveArticleUrl, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept" : "application/json"
+      },
+      body: JSON.stringify({
+        "text" : props.currArticle.text,
+        "headline" : props.currArticle.headline,
+        "posted" : props.currArticle.posted,
+        "user_id" : this.props.currUser.id,
+      })
+    })
+  }
+
   return( props.currArticle ? (
       <>
         <div>Title:</div>
@@ -18,11 +37,16 @@ const EditPage = (props) => {
           value={props.currArticle.text}
           onChange={(event) => props.editText(event.target.value)} />
         <br />
-        <input type="button" value="save" /><input type="button" value="post"/>
+        <div>Posted?</div>
+        <input type="checkbox" value={props.currArticle.posted}/>
+        <input type="button" value="save" onClick={()=>handleSave()}/>
       </>
   ) : (<Redirect to="/user" />)
   )
 }
+
+// TODO: make a post button instead of a checkbox
+// <input type="button" value="post"/>
 
 const mapStateToProps = (state) => {
   return {currArticle: state.currArticle}

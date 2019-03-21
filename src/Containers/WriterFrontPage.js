@@ -11,6 +11,8 @@ import WriterArticlePreview from "../Components/WriterArticlePreview"
 // Also provides button for going to a new article page
 // (they should be the same page, that's work today)
 
+const postUrl = "http://localhost:3001/api/v1/articles"
+
 class WriterFrontPage extends React.Component {
 
   getWritersArticles(){
@@ -40,11 +42,31 @@ class WriterFrontPage extends React.Component {
     })
   }
 
+  handleNewArticle(){
+    //console.log("clicked")
+    fetch(postUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Accept" : "application/json"
+      },
+      body: JSON.stringify({
+        "text" : "",
+        "headline" :"Untitled Article",
+        "posted" : "false",
+        "user_id" : this.props.currUser.id,
+      })
+    })
+    .then(res => res.json())
+    .then(parsed=>console.log(parsed))
+    //this method should also redirect you to the new article
+  }
+
   render() {
     return(this.props.currUser ? (
       <>
       {this.generateWriterArticlePreviews()}
-      <input type="button" value="new article"/>
+      <input type="button" value="new article" onClick={() => this.handleNewArticle()}/>
       </>
     ) : (<Redirect to="/redirect" />))
   }
