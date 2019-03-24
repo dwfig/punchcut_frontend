@@ -7,21 +7,33 @@ import RedirectPage from "./Containers/RedirectPage"
 import WriterFrontPage from "./Containers/WriterFrontPage"
 import EditPage from "./Containers/EditPage"
 import { connect } from "react-redux";
-import { STORING_ARTICLES } from "./types"
+import { STORING_ARTICLES, SETTING_USER } from "./types"
 import { Switch, Route, withRouter } from 'react-router-dom';
 
 const apiUrl = "http://localhost:3001/api/v1/articles"
+const autoLoginUrl = "http://localhost:3001/api/v1/auto_login"
 
 class App extends Component {
 
   componentDidMount(){
+    console.log("fetching articles")
     fetch(apiUrl)
       .then(res => res.json())
       .then(parsed => this.props.storeArticles(parsed))
+      .then(a=> console.log("done?"))
       //use props to dispatch an action to store the parsed articles
     const userId = localStorage.getItem("user_id")
     if (userId){
-      
+      console.log("fetching user")
+      fetch(autoLoginUrl, {
+        method: "GET",
+        headers: {
+          "Authorization" : userId
+        }
+      })
+      .then(res=>res.json())
+      .then(pars=> this.props.setUser(pars))
+      .then(console.log)
     }
   }
   //check Redux docs on React-Router if there are problems later
@@ -46,9 +58,10 @@ class App extends Component {
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {storeArticles: (articles) => {
-    dispatch({type: STORING_ARTICLES, payload: articles})
-  }}
+  return {
+    storeArticles: (articles) => {dispatch({type: STORING_ARTICLES, payload: articles})},
+    setUser: (user) => {dispatch({type: SETTING_USER, payload: user})}
+  }
   // this key value pair storeArticles: fn() handles putting fetched articles
   // into the store
   // map mapDispatchToProps makes that function available to this component

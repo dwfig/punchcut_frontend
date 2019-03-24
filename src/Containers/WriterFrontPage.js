@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import { Redirect } from "react-router";
 import WriterArticlePreview from "../Components/WriterArticlePreview"
 import { EDITING_ARTICLE } from "../types";
+import { NavLink } from 'react-router-dom';
+
 
 
 // TODO: this page should make its own fetch—the front page should fetch, this should fetch
@@ -19,6 +21,7 @@ const rolesUrl = "http://localhost:3001/api/v1/roles"
 class WriterFrontPage extends React.Component {
 
   getWritersArticles(){
+    console.log(this.props)
     let articleUsers = this.props.articles.map((article)=>{return article.users})
     let userEmails = articleUsers.map((userArray) =>
       {return userArray.map((user)=>{return user.email})})
@@ -89,17 +92,29 @@ class WriterFrontPage extends React.Component {
       this.props.history.push(`/edit/${newArticle.id}`)
     })
     // this should set currArticle to this article
-
   }
 
   render() {
-    return(this.props.currUser ? (
-      <>
-      {this.generateWriterArticlePreviews()}
-      <input type="button" value="new article" onClick={() => this.handleNewArticle()}/>
-      </>
-    ) : (<Redirect to="/redirect" />))
+    // add a conditional here so that the articles don't try to load
+    // if there aren't any articles
+    if(this.props.currUser){
+      if(this.props.articles){
+        return(
+          <>
+            {this.generateWriterArticlePreviews()}
+            <input type="button" value="new article" onClick={() => this.handleNewArticle()}/>
+          </>
+        )
+      }else{
+        return (<div>...</div>) }
+    }else{
+      return(
+        <div>You must <NavLink to="/admin">login</NavLink> to see this page.</div>
+      )
+    }
   }
+  // I'm worried that a redirect here might take place before the autologin
+  // if so, render the redirect page here instead
 }
 
 const mapStateToProps = (state) => {

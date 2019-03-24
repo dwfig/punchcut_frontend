@@ -27,8 +27,8 @@ function rootReducer(state = defaultState, action){
     case LOGGING_PASSWORD:
       return {...state, password: action.payload};
     case SETTING_USER:
-      localStorage.setItem("user_id", action.payload.id)
-      return {...state, currUser: action.payload}
+      localStorage.setItem("token", action.payload.jwt)
+      return {...state, currUser: action.payload.user}
     case EDITING_ARTICLE:
       return {...state, currArticle: action.payload}
     case EDITING_TEXT:

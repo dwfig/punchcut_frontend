@@ -21,6 +21,7 @@ const LoginPage = (props) => {
     })
     .then(res => res.json())
     .then(response => {
+      console.log("HELLO", response)
       if (response.errors){
         alert(response.errors)
       } else {
