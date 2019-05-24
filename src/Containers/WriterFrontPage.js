@@ -7,13 +7,13 @@ import { NavLink } from 'react-router-dom';
 
 
 
-// TODO: this page should make its own fetch—the front page should fetch, this should fetch
-// instead of relying on a single prelim fetch and sorting that data (probably?)
+// TODO: this page should make its own fetch??
+// for efficiency of calls
 
 // Current goals:
 // Writer page displays articles associated with this user
 // Also provides button for going to a new article page
-// (they should be the same page, that's work today)
+// (they should be the same page)
 
 const postUrl = "http://localhost:3001/api/v1/articles"
 const rolesUrl = "http://localhost:3001/api/v1/roles"
@@ -36,7 +36,7 @@ class WriterFrontPage extends React.Component {
     // console.log(filteredArticles)
     return filteredArticles
     // TODO: make a separate route and fetch there for each users' associated aritcles
-    // that's probably easier than this nonsense
+    // that's probably easier than this
   }
 
   generateWriterArticlePreviews(){
@@ -49,10 +49,11 @@ class WriterFrontPage extends React.Component {
   }
 
   handleNewArticle(){
-    //this should be refactored into several helper methods
+    //this should be refactored into two or three
     // first fetch, second fetch, redirect
     //console.log("clicked")
     let newArticle = {}
+    // ONE
     fetch(postUrl, {
       method: "POST",
       headers: {
@@ -63,17 +64,14 @@ class WriterFrontPage extends React.Component {
         "text" : "",
         "headline" :"Untitled Article",
         "posted" : "false",
-        // it's not clear to me how to handle boolean values
-        // between rails and js
-        // i think one approach is to make them strings
       })
     })
     .then(res => res.json())
     .then(parsed=> {
       newArticle = parsed
-      //console.log(newArticleId)
       return newArticle.id
     })
+    // TWO
     .then(a => fetch(rolesUrl,{
       method: "POST",
       headers: {
@@ -86,8 +84,8 @@ class WriterFrontPage extends React.Component {
         "user_role" : "writer"
       })
     }))
+    // THREE
     .then(a => {
-      console.log(newArticle, this.props.currArticle)
       this.props.editArticle(newArticle)
       this.props.history.push(`/edit/${newArticle.id}`)
     })
