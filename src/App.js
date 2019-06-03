@@ -20,11 +20,9 @@ class App extends Component {
     fetch(apiUrl)
       .then(res => res.json())
       .then(parsed => this.props.storeArticles(parsed))
-      .then(a=> console.log("done?"))
       //use props to dispatch an action to store the parsed articles
     const userId = localStorage.getItem("user_id")
     if (userId){
-      console.log("fetching user")
       fetch(autoLoginUrl, {
         method: "GET",
         headers: {
@@ -33,7 +31,6 @@ class App extends Component {
       })
       .then(res=>res.json())
       .then(pars=> this.props.setUser(pars))
-      .then(console.log)
     }
   }
   //check Redux docs on React-Router if there are problems later

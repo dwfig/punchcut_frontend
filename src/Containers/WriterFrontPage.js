@@ -21,7 +21,6 @@ const rolesUrl = "http://localhost:3001/api/v1/roles"
 class WriterFrontPage extends React.Component {
 
   getWritersArticles(){
-    console.log(this.props)
     let articleUsers = this.props.articles.map((article)=>{return article.users})
     let userEmails = articleUsers.map((userArray) =>
       {return userArray.map((user)=>{return user.email})})
@@ -33,7 +32,6 @@ class WriterFrontPage extends React.Component {
     // as filteredArticles, so there should be no issue indexing
     let filteredArticles = this.props.articles.filter((article, index) => {
       return userEmails[index].includes(this.props.currUser.email)})
-    // console.log(filteredArticles)
     return filteredArticles
     // TODO: make a separate route and fetch there for each users' associated aritcles
     // that's probably easier than this
@@ -51,7 +49,6 @@ class WriterFrontPage extends React.Component {
   handleNewArticle(){
     //this should be refactored into two or three
     // first fetch, second fetch, redirect
-    //console.log("clicked")
     let newArticle = {}
     // ONE
     fetch(postUrl, {

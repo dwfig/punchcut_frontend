@@ -32,7 +32,6 @@ const LoginPage = (props) => {
       }})
   }
 
-  // console.log(props.currUser)
   return(
     props.currUser ? (
       <Redirect to="/user"/>
@@ -53,7 +52,6 @@ const LoginPage = (props) => {
 // adding redux here:
 
 const mapStateToProps = (state) => {
-  // console.log("state:", state)
   return {email: state.email, password: state.password, currUser: state.currUser}
 }
 
